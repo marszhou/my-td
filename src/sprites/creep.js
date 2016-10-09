@@ -11,13 +11,13 @@ export default class Creep extends Phaser.Sprite {
     this.activated = false
     this.type = type
     this.level = level
-    this.speed = 200 * Math.random()
+    this.speed = 100 + (100 * Math.random())
     this.health = 100
     this.currentLength = 0
     this.finished = false
     this.onKilled = new Phaser.Signal()
     this.onFinished = new Phaser.Signal()
-    this.offset = Math.random() - 0.5
+    this.offset = (Math.random() - 0.5) * 2
   }
 
   get activated() {
