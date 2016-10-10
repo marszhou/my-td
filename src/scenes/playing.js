@@ -38,6 +38,13 @@ export default class PlayingScene extends Phaser.State {
     this.panels.map.generateNextWave(this.level + 1)
 
     GameState.onGoldChange.add(this.handleGoldChange, this)
+    console.log(GameState)
+    GameState.onLevelChange.add(this.handleLevelChange, this)
+    GameState.onLivesChange.add(this.handleLivesChange, this)
+    GameState.onKillsChange.add(this.handleKillsChange, this)
+    GameState.onScoreChange.add(this.handleScoreChange, this)
+    GameState.onSelectedTowerChange.add(this.handleSelectedTowerChange, this)
+
     GameState.init()
 
     // this.game.add.group(this.panels.map)
@@ -120,5 +127,25 @@ export default class PlayingScene extends Phaser.State {
 
   handleGoldChange(gold) {
     this.panels.info.golds = gold
+  }
+
+  handleLevelChange(level) {
+    this.panels.info.level = level
+  }
+
+  handleLivesChange(lives) {
+    this.panels.info.lives = lives
+  }
+
+  handleKillsChange(kills) {
+    this.panels.info.kills = kills
+  }
+
+  handleScoreChange(score) {
+    this.panels.info.score = score
+  }
+
+  handleSelectedTowerChange(tower) {
+
   }
 }
