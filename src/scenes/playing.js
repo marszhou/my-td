@@ -113,7 +113,7 @@ export default class PlayingScene extends Phaser.State {
   }
 
   handleBuildTower(tower) {
-
+    this.panels.factory.current = -1
   }
 
   handleSelectTower(tower) {
