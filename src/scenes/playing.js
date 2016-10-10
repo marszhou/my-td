@@ -5,7 +5,7 @@ import ControlsPanel from '../panels/controls'
 import FactoryPanel from '../panels/factory'
 import TowerInfoPanel from '../panels/tower-info'
 import NextWavePanel from '../panels/next-wave'
-import GameState from 'utils/game-state'
+import GameState from 'src/game-state'
 
 export default class PlayingScene extends Phaser.State {
   preload() {

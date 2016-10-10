@@ -4,7 +4,7 @@ import Path from '../components/path'
 import {globalToLocal} from '../utils/functions'
 // import Creep from '../sprites/creep'
 import Wave from 'src/wave'
-import GameState from 'utils/game-state'
+import GameState from 'src/game-state'
 
 const cellWidth = 20
 
@@ -204,10 +204,6 @@ export default class MapPanel extends Phaser.Group {
   }
 
   addTower(tower, pos) {
-    // let x = pos.x * cellWidth
-    // let y = pos.y * cellWidth
-
-    // let tower = new clazz(this.game, x, y)
     tower.hideRadius()
     this.add(tower)
 

@@ -1,6 +1,11 @@
 class GameState {
   constructor() {
     this.onGoldChange = new Phaser.Signal()
+    this.onLevelChange = new Phaser.Signal()
+    this.onLivesChange = new Phaser.Signal()
+    this.onKillsChange = new Phaser.Signal()
+    this.onScoreChange = new Phaser.Signal()
+    this.onSelectedTowerChange = new Phaser.Signal()
 
     this.towers = []
     this.selectedTower = null
@@ -13,6 +18,11 @@ class GameState {
 
   init() {
     this.onGoldChange.dispatch(this.gold)
+    this.onLivesChange.dispatch(this.level)
+    this.onLivesChange.dispatch(this.lives)
+    this.onKillsChange.dispatch(this.kills)
+    this.onScoreChange.dispatch(this.score)
+    this.onSelectedTowerChange.dispatch(this.selectedTower)
   }
 
   getTowerAt(pos) {
@@ -50,6 +60,7 @@ class GameState {
 
   set selectedTower(tower) {
     this._selectedTower = tower
+    this.onSelectedTowerChange.dispatch(tower)
   }
 
   get gold() {
@@ -59,6 +70,42 @@ class GameState {
   set gold(v) {
     this._gold = v
     this.onGoldChange.dispatch(v)
+  }
+
+  get level() {
+    return this._level
+  }
+
+  set level(v) {
+    this._level = v
+    this.onLevelChange.dispatch(v)
+  }
+
+  get lives() {
+    return this._lives
+  }
+
+  set lives(v) {
+    this._lives = v
+    this.onLivesChange.dispatch(v)
+  }
+
+  get kills() {
+    return this._kills
+  }
+
+  set kills(v) {
+    this._kills = v
+    this.onKillsChange.dispatch(v)
+  }
+
+  get score() {
+    return this._score
+  }
+
+  set score(v) {
+    this._score = v
+    this.onScoreChange.dispatch(v)
   }
 }
 
