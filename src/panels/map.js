@@ -225,7 +225,6 @@ export default class MapPanel extends Phaser.Group {
       _.pull(this.towers, tower)
       this._selectedTower = null
       this.remove(tower.tower)
-      this.onSellTower.dispatch(tower.tower)
     }
   }
 
@@ -237,10 +236,12 @@ export default class MapPanel extends Phaser.Group {
     if (this._selectedTower === tower) {
       tower.hideRadius()
       this._selectedTower = null
+      this.onCancelTower.dispatch()
     } else {
       this.unhighlightAllTowers()
       tower.showRadius()
       this._selectedTower = tower
+      this.onSelectTower.dispatch(tower)
     }
   }
 

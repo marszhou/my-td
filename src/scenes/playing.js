@@ -30,6 +30,9 @@ export default class PlayingScene extends Phaser.State {
 
     this.panels.map.onNewWaveIsReady.add(this.handleNewWaveIsReady, this)
     this.panels.map.onPrepareNextWave.add(this.handlePrepareNextWave, this)
+    this.panles.map.onSelectTower.add(this.handleSelectorTower, this)
+    this.panles.map.onCancelTower.add(this.handleCancelTower, this)
+    this.panles.map.onBuildTower.add(this.handleBuildTower, this)
 
     this.panels.map.generateNextWave(this.level + 1)
 
@@ -97,5 +100,17 @@ export default class PlayingScene extends Phaser.State {
 
   handlePrepareNextWave(wave) {
     this.panels.map.generateNextWave(this.level + 1)
+  }
+
+  handleBuildTower(tower) {
+
+  }
+
+  handleSelectorTower(tower) {
+
+  }
+
+  handleCancelTower() {
+
   }
 }
