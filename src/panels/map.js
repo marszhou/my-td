@@ -46,6 +46,10 @@ export default class MapPanel extends Phaser.Group {
     this.game.input.onDown.add(this.onDown, this)
 
     this.onDestroy.add(this._onDestroy, this)
+
+    this.onSelectTower = new Phaser.Signal()
+    this.onCancelTower = new Phaser.Signal()
+    this.onBuildTower = new Phaser.Signal()
   }
 
   get currentTowerPrototype() {
@@ -211,10 +215,18 @@ export default class MapPanel extends Phaser.Group {
     this.towers.push({tower: tower, pos: pos})
 
     this.currentTowerPrototype = null
+
+    this.onBuildTower.dispatch(tower)
   }
 
   removeTower(pos) {
-
+    let tower = this.getTowerAt(pos)
+    if (tower) {
+      _.pull(this.towers, tower)
+      this._selectedTower = null
+      this.remove(tower.tower)
+      this.onSellTower.dispatch(tower.tower)
+    }
   }
 
   getTowerAt(pos) {

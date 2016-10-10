@@ -20,9 +20,10 @@ export default class TowerInfo extends Phaser.Group {
     this.add(this.border)
 
     this.initComponents()
-    let tower = new MachineGun(this.game, 0, 0)
-    tower.level = 2
-    this.tower = tower
+    // let tower = new MachineGun(this.game, 0, 0)
+    // tower.level = 2
+    // this.tower = tower
+    this.tower = null
 
     this.onSell = new Phaser.Signal()
     this.onBuy = new Phaser.Signal()
