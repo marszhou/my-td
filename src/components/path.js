@@ -4,11 +4,11 @@ export default class Path extends Phaser.Graphics {
   constructor(game, width, height, cellWidth, steps, points) {
     super(game, 0, 0)
 
-    this.towerAvaliibleCells = []
+    this.towerAvailibleCells = []
 
     for (let y = 0; y < height / cellWidth; y++) {
       for (let x = 0; x < width / cellWidth; x++) {
-        this.towerAvaliibleCells.push({x: x, y: y})
+        this.towerAvailibleCells.push({x: x, y: y})
       }
     }
 
@@ -51,7 +51,7 @@ export default class Path extends Phaser.Graphics {
       line.push({x: px, y: py})
       this.lineTo(px, py)
 
-      this.towerAvaliibleCells = this.excludeCells(this.towerAvaliibleCells, 1.5, {x: px/this.cellWidth, y: py/this.cellWidth})
+      this.towerAvailibleCells = this.excludeCells(this.towerAvailibleCells, 1.5, {x: px/this.cellWidth, y: py/this.cellWidth})
     }
 
     this.translatedPositions = {pxs, pys}
@@ -75,7 +75,7 @@ export default class Path extends Phaser.Graphics {
       this.endFill()
     })
 
-    this.towerAvaliibleCells.forEach(_point => {
+    this.towerAvailibleCells.forEach(_point => {
       let point = this.translatePoint(_point)
       this.beginFill(0xff0000, 0.2)
       this.drawRect(point.x, point.y, this.cellWidth, this.cellWidth)
@@ -103,6 +103,6 @@ export default class Path extends Phaser.Graphics {
   }
 
   getTowerAvailibleCells() {
-    return this.towerAvaliibleCells
+    return this.towerAvailibleCells
   }
 }

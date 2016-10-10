@@ -13,6 +13,10 @@ export default class BaseTower extends Phaser.Sprite {
     this.target = []
     this.type = 'single'
     this.speed = 80
+
+    this.radius = new Phaser.Graphics(this.game, x + this.width / 2, y + this.height / 2)
+    this.addChild(this.radius)
+    this.radius.alpha = 0
   }
 
   makeFactoryInfo() {
@@ -43,5 +47,16 @@ export default class BaseTower extends Phaser.Sprite {
     }
 
     return info
+  }
+
+  showRadius() {
+    this.radius.beginFill(0xffffff, 0.25)
+    this.radius.drawCircle(0, 0, 100)
+    this.radius.endFill()
+    this.radius.alpha = 1
+  }
+
+  hideRadius() {
+
   }
 }

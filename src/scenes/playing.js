@@ -13,6 +13,7 @@ export default class PlayingScene extends Phaser.State {
 
     this.panels = {}
     this.panels.map = new MapPanel(800, 600, 5, 5, this.game)
+
     this.panels.info = new InfoPanel(160, 70, 810, 5, this.game)
     this.panels.controls = new ControlsPanel(160, 65, 810, 80, this.game)
     this.panels.factory = new FactoryPanel(160, 85, 810, 150, this.game)
@@ -26,6 +27,7 @@ export default class PlayingScene extends Phaser.State {
     this.panels.towerInfo.onSell.add(this.handleSellTower, this)
     this.panels.towerInfo.onBuy.add(this.handleUpgradeTower, this)
     this.panels.nextWave.onNextWave.add(this.handleNextWave, this)
+
     this.panels.map.onNewWaveIsReady.add(this.handleNewWaveIsReady, this)
     this.panels.map.onPrepareNextWave.add(this.handlePrepareNextWave, this)
 
@@ -67,11 +69,11 @@ export default class PlayingScene extends Phaser.State {
   }
 
   handleCancelChooseFactoryPrototype() {
-
+    this.panels.map.currentTowerPrototype = null
   }
 
   handleChooseFactoryPrototype(clazz) {
-
+    this.panels.map.currentTowerPrototype = clazz
   }
 
   handlePause() {
