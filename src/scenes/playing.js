@@ -38,7 +38,6 @@ export default class PlayingScene extends Phaser.State {
     this.panels.map.generateNextWave(this.level + 1)
 
     GameState.onGoldChange.add(this.handleGoldChange, this)
-    console.log(GameState)
     GameState.onLevelChange.add(this.handleLevelChange, this)
     GameState.onLivesChange.add(this.handleLivesChange, this)
     GameState.onKillsChange.add(this.handleKillsChange, this)

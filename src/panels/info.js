@@ -91,7 +91,7 @@ export default class InfoPanel extends Phaser.Group {
   set lives(v) {
     this._lives = v
     if (this.labels.lives) {
-      this.labels.lives.text = this.currentWaveText
+      this.labels.lives.text = this.livesText
     }
   }
 
