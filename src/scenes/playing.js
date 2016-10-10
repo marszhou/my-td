@@ -5,6 +5,7 @@ import ControlsPanel from '../panels/controls'
 import FactoryPanel from '../panels/factory'
 import TowerInfoPanel from '../panels/tower-info'
 import NextWavePanel from '../panels/next-wave'
+import GameState from 'utils/game-state'
 
 export default class PlayingScene extends Phaser.State {
   preload() {
@@ -30,11 +31,14 @@ export default class PlayingScene extends Phaser.State {
 
     this.panels.map.onNewWaveIsReady.add(this.handleNewWaveIsReady, this)
     this.panels.map.onPrepareNextWave.add(this.handlePrepareNextWave, this)
-    this.panles.map.onSelectTower.add(this.handleSelectorTower, this)
-    this.panles.map.onCancelTower.add(this.handleCancelTower, this)
-    this.panles.map.onBuildTower.add(this.handleBuildTower, this)
+    this.panels.map.onSelectTower.add(this.handleSelectTower, this)
+    this.panels.map.onCancelTower.add(this.handleCancelTower, this)
+    this.panels.map.onBuildTower.add(this.handleBuildTower, this)
 
     this.panels.map.generateNextWave(this.level + 1)
+
+    GameState.onGoldChange.add(this.handleGoldChange, this)
+    GameState.init()
 
     // this.game.add.group(this.panels.map)
   }
@@ -106,11 +110,15 @@ export default class PlayingScene extends Phaser.State {
 
   }
 
-  handleSelectorTower(tower) {
+  handleSelectTower(tower) {
 
   }
 
   handleCancelTower() {
 
+  }
+
+  handleGoldChange(gold) {
+    this.panels.info.golds = gold
   }
 }

@@ -4,6 +4,7 @@ import Path from '../components/path'
 import {globalToLocal} from '../utils/functions'
 // import Creep from '../sprites/creep'
 import Wave from 'src/wave'
+import GameState from 'utils/game-state'
 
 const cellWidth = 20
 
@@ -37,10 +38,8 @@ export default class MapPanel extends Phaser.Group {
     this.nextWave = null
     this.currentWave = null
 
-    this.towers = []
     this.currentTowerPrototype = null
     this._currentTower = null
-    this._selectedTower = null
 
     this.game.input.addMoveCallback(this.onMove, this)
     this.game.input.onDown.add(this.onDown, this)
@@ -190,12 +189,12 @@ export default class MapPanel extends Phaser.Group {
       if (this._currentTower) {
         let towerCell = this.towerAvailibleCell(pos)
         if (towerCell) {
-          this.addTower(this.currentTowerPrototype, towerCell)
+          this.addTower(this._currentTower, towerCell)
         }
       } else {
         let towerCell = this.towerAvailibleCell(pos)
         if (towerCell) {
-          let tower = this.getTowerAt(towerCell)
+          let tower = GameState.getTowerAt(towerCell)
           if (tower) {
             this.toggleSelectTower(tower.tower)
           }
@@ -204,49 +203,42 @@ export default class MapPanel extends Phaser.Group {
     }
   }
 
-  addTower(clazz, pos) {
-    let x = pos.x * cellWidth
-    let y = pos.y * cellWidth
-    let tower = this._currentTower
+  addTower(tower, pos) {
+    // let x = pos.x * cellWidth
+    // let y = pos.y * cellWidth
 
     // let tower = new clazz(this.game, x, y)
     tower.hideRadius()
     this.add(tower)
-    this.towers.push({tower: tower, pos: pos})
 
+    GameState.addTower(tower, pos)
     this.currentTowerPrototype = null
 
     this.onBuildTower.dispatch(tower)
   }
 
   removeTower(pos) {
-    let tower = this.getTowerAt(pos)
+    let tower = GameState.removeTower(pos)
     if (tower) {
-      _.pull(this.towers, tower)
-      this._selectedTower = null
-      this.remove(tower.tower)
+      this.remove(tower)
     }
   }
 
-  getTowerAt(pos) {
-    return _.find(this.towers, {pos: pos})
-  }
-
   toggleSelectTower(tower) {
-    if (this._selectedTower === tower) {
+    if (GameState.selectedTower === tower) {
       tower.hideRadius()
-      this._selectedTower = null
+      GameState.selectedTower = null
       this.onCancelTower.dispatch()
     } else {
       this.unhighlightAllTowers()
       tower.showRadius()
-      this._selectedTower = tower
+      GameState.selectedTower = tower
       this.onSelectTower.dispatch(tower)
     }
   }
 
   unhighlightAllTowers() {
-    this.towers.forEach(({tower}) => {
+    GameState.towers.forEach(({tower}) => {
       tower.hideRadius()
     })
   }
