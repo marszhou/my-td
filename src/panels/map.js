@@ -39,6 +39,8 @@ export default class MapPanel extends Phaser.Group {
 
     this.towers = []
     this.currentTowerPrototype = null
+    this._currentTower = null
+    this._selectedTower = null
 
     this.game.input.addMoveCallback(this.onMove, this)
     this.game.input.onDown.add(this.onDown, this)
@@ -51,6 +53,7 @@ export default class MapPanel extends Phaser.Group {
   }
 
   set currentTowerPrototype(clazz) {
+    this.unhighlightAllTowers()
     this._currentTowerPrototype = clazz
     if (clazz) {
       this._currentTower = new clazz(this.game, 0, 0)
@@ -177,21 +180,61 @@ export default class MapPanel extends Phaser.Group {
   }
 
   onDown(pointer) {
-    if (this.canOperate && this._currentTower) {
-      let pos = globalToLocal(this, pointer.position)
-      let towerCell = this.towerAvailibleCell(pos)
-      if (towerCell) {
-        this.addTower(this.currentTowerPrototype, towerCell)
+    let pos = globalToLocal(this, pointer.position)
+
+    if (this.canOperate) {
+      if (this._currentTower) {
+        let towerCell = this.towerAvailibleCell(pos)
+        if (towerCell) {
+          this.addTower(this.currentTowerPrototype, towerCell)
+        }
+      } else {
+        let towerCell = this.towerAvailibleCell(pos)
+        if (towerCell) {
+          let tower = this.getTowerAt(towerCell)
+          if (tower) {
+            this.toggleSelectTower(tower.tower)
+          }
+        }
       }
     }
   }
 
   addTower(clazz, pos) {
     let x = pos.x * cellWidth
-    // @todo
+    let y = pos.y * cellWidth
+    let tower = this._currentTower
+
+    // let tower = new clazz(this.game, x, y)
+    tower.hideRadius()
+    this.add(tower)
+    this.towers.push({tower: tower, pos: pos})
+
+    this.currentTowerPrototype = null
   }
 
   removeTower(pos) {
 
+  }
+
+  getTowerAt(pos) {
+    return _.find(this.towers, {pos: pos})
+  }
+
+  toggleSelectTower(tower) {
+    if (this._selectedTower === tower) {
+      tower.hideRadius()
+      this._selectedTower = null
+    } else {
+      this.unhighlightAllTowers()
+      tower.showRadius()
+      this._selectedTower = tower
+    }
+  }
+
+  unhighlightAllTowers() {
+    this.towers.forEach(({tower}) => {
+      tower.hideRadius()
+    })
   }
 }
