@@ -7,7 +7,7 @@ export default class MachineGun extends BaseTower {
     this.height = 20
 
     this.name = 'MachineGun'
-    this.cost = 100
+    this.cost = 1001
     this.level = 1
     this.maxLevel = 10
     this.target = ['air', 'ground']

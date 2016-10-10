@@ -168,7 +168,9 @@ export default class MapPanel extends Phaser.Group {
   }
 
   onMove(pointer) {
-    if (!this.canOperate || !this._currentTower) {
+    if (!this.canOperate ||
+      !this._currentTower ||
+      (this._currentTower && !GameState.canAffordBuild(this._currentTower))) {
       return false
     }
     let pos = globalToLocal(this, pointer.position)
@@ -186,16 +188,15 @@ export default class MapPanel extends Phaser.Group {
     let pos = globalToLocal(this, pointer.position)
 
     if (this.canOperate) {
-      if (this._currentTower) {
-        let towerCell = this.towerAvailibleCell(pos)
+      let towerCell = this.towerAvailibleCell(pos)
+      let tower = GameState.getTowerAt(towerCell)
+      if (this._currentTower && GameState.canAffordBuild(this._currentTower) && !tower) {
         if (towerCell) {
           this.addTower(this._currentTower, towerCell)
         }
       } else {
-        let towerCell = this.towerAvailibleCell(pos)
         if (towerCell) {
-          let tower = GameState.getTowerAt(towerCell)
-          if (tower) {
+          if (tower && !this._currentTower) {
             this.toggleSelectTower(tower.tower)
           }
         }

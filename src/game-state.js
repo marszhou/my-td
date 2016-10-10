@@ -107,6 +107,18 @@ class GameState {
     this._score = v
     this.onScoreChange.dispatch(v)
   }
+
+  canAffordBuild(tower) {
+    return (this.gold > tower.cost)
+  }
+
+  canAffordUpgrade(tower) {
+    let nextLevelInfo = tower.getNextLevelInfo()
+    if (nextLevelInfo) {
+      return (this.gold > nextLevelInfo.cost)
+    }
+    return false
+  }
 }
 
 export default new GameState()
