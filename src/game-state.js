@@ -29,21 +29,27 @@ class GameState {
     return _.find(this.towers, {pos: pos})
   }
 
+  getTowerIndex(tower) {
+    return _.findIndex(this.towers, {tower: tower})
+  }
+
   addTower(tower, pos) {
     this.towers.push({tower: tower, pos: pos})
   }
 
-  removeTower(pos) {
-    let tower = this.getTowerAt(pos)
-    if (tower) {
-      _.pull(this.towers, tower)
+  removeTower(tower) {
+    let index = this.getTowerIndex(tower)
+    if (index > -1) {
+      this.towers.splice(index, 1)
       this.selectedTower = null
     }
     return tower
   }
 
   sellTower(tower) {
-
+    let currentLevelInfo = tower.getCurrentLevelInfo()
+    this.gold += currentLevelInfo.price
+    return tower
   }
 
   buyTower(tower) {
@@ -51,7 +57,9 @@ class GameState {
   }
 
   upgradeTower(tower) {
-
+    let nextLevelInfo = tower.getNextLevelInfo()
+    tower.level += 1
+    this.gold -= nextLevelInfo.cost
   }
 
   get selectedTower() {
@@ -109,13 +117,13 @@ class GameState {
   }
 
   canAffordBuild(tower) {
-    return (this.gold > tower.cost)
+    return (this.gold >= tower.cost)
   }
 
   canAffordUpgrade(tower) {
     let nextLevelInfo = tower.getNextLevelInfo()
     if (nextLevelInfo) {
-      return (this.gold > nextLevelInfo.cost)
+      return (this.gold >= nextLevelInfo.cost)
     }
     return false
   }

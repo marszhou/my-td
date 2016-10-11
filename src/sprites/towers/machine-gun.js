@@ -7,16 +7,14 @@ export default class MachineGun extends BaseTower {
     this.height = 20
 
     this.name = 'MachineGun'
-    this.cost = 1001
+    this.cost = 100
     this.level = 1
     this.maxLevel = 10
     this.target = ['air', 'ground']
     this.type = 'single'
     this.speed = 80
-  }
 
-  getLevelInfo(level) {
-    const levels = {
+    this.levels = {
       1: {
         damage: 10,
         radius: 100,
@@ -26,19 +24,22 @@ export default class MachineGun extends BaseTower {
         damage: 20,
         radius: 110,
         cost: 150
+      },
+      3: {
+        damage: 30,
+        radius: 130,
+        cost: 250
+      },
+      4: {
+        damage: 50,
+        radius: 160,
+        cost: 450
+      },
+      5: {
+        damage: 80,
+        radius: 180,
+        cost: 850
       }
     }
-
-    if (level in levels) {
-      return levels[level]
-    }
-  }
-
-  getCurrentLevelInfo() {
-    return this.getLevelInfo(this.level)
-  }
-
-  getNextLevelInfo() {
-    return this.getLevelInfo(this.level + 1)
   }
 }

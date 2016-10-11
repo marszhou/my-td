@@ -13,18 +13,12 @@ export default class Ice extends BaseTower {
     this.target = ['ground']
     this.type = 'splash'
     this.speed = 120
-  }
 
-  getLevelInfo(level) {
-    const levels = {
+    this.levels = {
       1: {
         damange: 10,
         radius: 100
       }
-    }
-
-    if (level in levels) {
-      return levels[level]
     }
   }
 

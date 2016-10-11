@@ -1,4 +1,4 @@
-// import {makeTextLabel} from 'src/utils/functions'
+import {makeTextLabel} from 'src/utils/functions'
 
 export default class BaseTower extends Phaser.Sprite {
   constructor(game, x, y, key, frame) {
@@ -9,12 +9,19 @@ export default class BaseTower extends Phaser.Sprite {
     this.name = ''
     this.cost = 0
     this.level = 1
+
+    this.radius = new Phaser.Graphics(this.game, x + this.width / 2, y + this.height / 2)
+    this.label = makeTextLabel(this.game, this.level, 12)
+    this.label.anchor.set(0.6)
+    this.label.x = this.width / 2
+    this.label.y = this.height / 2
+
     this.maxLevel = 10
     this.target = []
     this.type = 'single'
     this.speed = 80
+    this.built = false
 
-    this.radius = new Phaser.Graphics(this.game, x + this.width / 2, y + this.height / 2)
     // this.addChild(this.radius)
     // this.hideRadius()
   }
@@ -35,7 +42,7 @@ export default class BaseTower extends Phaser.Sprite {
     info.current.title = 'CURRENT LVL: ' + this.level
     info.current.damage = 'DAMAGE: ' + currentLevel.damage
     info.current.radius = 'RADIUS: ' + currentLevel.radius
-    info.current.sell = 'SELL: ' + Math.floor(currentLevel.cost * 0.3)
+    info.current.sell = 'SELL: ' + currentLevel.price
 
     info.next = {}
     let nextLevel = this.getLevelInfo(this.level + 1)
@@ -61,5 +68,46 @@ export default class BaseTower extends Phaser.Sprite {
     this.removeChild(this.radius)
     this.radius.clear()
     this.radius.alpha = 0
+  }
+
+  get built() {
+    return this._built
+  }
+
+  set built(v) {
+    this._built = v
+    if (v) {
+      this.addChild(this.label)
+    } else {
+      this.removeChild(this.label)
+    }
+  }
+
+  get level() {
+    return this._level
+  }
+
+  set level(v) {
+    this._level = v
+    if (this.label) {
+      this.label.text = this._level
+    }
+  }
+
+  getLevelInfo(level) {
+    if (level in this.levels) {
+      let info = this.levels[level]
+      info.price = Math.floor(info.cost * 0.3)
+      return info
+    }
+  }
+
+  getCurrentLevelInfo() {
+    let info = this.getLevelInfo(this.level)
+    return info
+  }
+
+  getNextLevelInfo() {
+    return this.getLevelInfo(this.level + 1)
   }
 }

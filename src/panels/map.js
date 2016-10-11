@@ -49,6 +49,8 @@ export default class MapPanel extends Phaser.Group {
     this.onSelectTower = new Phaser.Signal()
     this.onCancelTower = new Phaser.Signal()
     this.onBuildTower = new Phaser.Signal()
+
+    GameState.onSelectedTowerChange.add(this.handleSelectedTowerChange, this)
   }
 
   get currentTowerPrototype() {
@@ -207,6 +209,7 @@ export default class MapPanel extends Phaser.Group {
   addTower(tower, pos) {
     tower.hideRadius()
     this.add(tower)
+    tower.built = true
 
     GameState.addTower(tower, pos)
     this.currentTowerPrototype = null
@@ -214,8 +217,8 @@ export default class MapPanel extends Phaser.Group {
     this.onBuildTower.dispatch(tower)
   }
 
-  removeTower(pos) {
-    let tower = GameState.removeTower(pos)
+  removeTower(tower) {
+    GameState.removeTower(tower)
     if (tower) {
       this.remove(tower)
     }
@@ -223,14 +226,16 @@ export default class MapPanel extends Phaser.Group {
 
   toggleSelectTower(tower) {
     if (GameState.selectedTower === tower) {
-      tower.hideRadius()
       GameState.selectedTower = null
-      this.onCancelTower.dispatch()
     } else {
-      this.unhighlightAllTowers()
-      tower.showRadius()
       GameState.selectedTower = tower
-      this.onSelectTower.dispatch(tower)
+    }
+  }
+
+  handleSelectedTowerChange(tower) {
+    this.unhighlightAllTowers()
+    if (tower) {
+      tower.showRadius()
     }
   }
 

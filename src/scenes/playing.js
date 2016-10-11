@@ -74,11 +74,13 @@ export default class PlayingScene extends Phaser.State {
   }
 
   handleSellTower(tower) {
-
+    GameState.sellTower(tower)
+    this.panels.map.removeTower(tower)
   }
 
   handleUpgradeTower(tower) {
-
+    GameState.upgradeTower(tower)
+    GameState.selectedTower = tower
   }
 
   handleCancelChooseFactoryPrototype() {
@@ -146,6 +148,6 @@ export default class PlayingScene extends Phaser.State {
   }
 
   handleSelectedTowerChange(tower) {
-
+    this.panels.towerInfo.tower = tower
   }
 }

@@ -3,6 +3,7 @@ import {makeTextLabel, verticallyLayoutComponents} from '../utils/functions'
 import TextButton from '../components/text-button'
 import _ from 'lodash'
 import MachineGun from '../sprites/towers/machine-gun'
+import GameState from 'src/game-state'
 
 export default class TowerInfo extends Phaser.Group {
   constructor(width, height, x, y, game, parent, name, addToStage, enableBody, physicsBodyType) {
@@ -27,6 +28,8 @@ export default class TowerInfo extends Phaser.Group {
 
     this.onSell = new Phaser.Signal()
     this.onBuy = new Phaser.Signal()
+
+    GameState.onGoldChange.add(this.handleGoldChange, this)
   }
 
   initComponents() {
@@ -76,7 +79,7 @@ export default class TowerInfo extends Phaser.Group {
         this.next.buy.text = 'BUY'
         this.next.buy.disabled = true
       } else {
-        this.next.buy.disabled = false
+        this.next.buy.disabled = !GameState.canAffordUpgrade(this.tower)
       }
     } else {
       this.current.title.text = 'CURRENT LVL: --'
@@ -103,12 +106,16 @@ export default class TowerInfo extends Phaser.Group {
   }
 
   handleSell() {
-    this.tower = new MachineGun(this.game, 0, 0)
+    // this.tower = new MachineGun(this.game, 0, 0)
     this.onSell.dispatch(this.tower)
   }
 
   handleBuy() {
-    this.tower = null
+    // this.tower = null
     this.onBuy.dispatch(this.tower)
+  }
+
+  handleGoldChange() {
+    this.updateComponent()
   }
 }
