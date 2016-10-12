@@ -1,4 +1,6 @@
 import BaseTower from './base'
+import Bullet from '../weapons/bullet'
+import {getTargetAngleDegree} from 'src/utils/functions'
 
 export default class MachineGun extends BaseTower {
   constructor(game, x, y) {
@@ -40,6 +42,36 @@ export default class MachineGun extends BaseTower {
         radius: 180,
         cost: 850
       }
+    }
+
+    this.__makeWeapon()
+  }
+
+  __makeWeapon() {
+    this.weapon = this.game.add.weapon(30, 'bullet2')
+    //  The bullet will be automatically killed when it leaves the world bounds
+    this.weapon.bulletKillType = Phaser.Weapon.KILL_WORLD_BOUNDS;
+
+    //  Because our bullet is drawn facing up, we need to offset its rotation:
+    this.weapon.bulletAngleOffset = 90;
+
+    //  The speed at which the bullet is fired
+    this.weapon.bulletSpeed = 400;
+
+    //  Speed-up the rate of fire, allowing them to shoot 1 bullet every 60ms
+    this.weapon.fireRate = 60;
+
+    this.weapon.trackSprite(this, 14, 0);
+
+    console.log(this.weapon)
+  }
+
+  fire() {
+    if (this.target) {
+      super.fire()
+      let degree = getTargetAngleDegree(this, this.target)
+      this.weapon.fireAngle = degree
+      this.weapon.fire()
     }
   }
 }

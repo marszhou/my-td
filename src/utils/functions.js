@@ -113,3 +113,7 @@ export const getEnemiesInTowerRange = (tower, enemies) => {
 export const findBestTarget = (enemies) => {
   return enemies.length > 0 ? enemies[0] : null
 }
+
+export const getTargetAngleDegree = (p1, p2) => {
+  return Math.atan2(p2.y - p1.y, p2.x - p1.x) * 180 / Math.PI
+}
