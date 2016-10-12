@@ -16,8 +16,9 @@ export default class Poision extends BaseTower {
 
     this.levels = {
       1: {
-        damange: 10,
-        radius: 100
+        damage: 10,
+        radius: 100,
+        cost: 100
       }
     }
   }
