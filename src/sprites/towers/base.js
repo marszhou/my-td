@@ -55,14 +55,17 @@ export default class BaseTower extends Phaser.Sprite {
   }
 
   showRadius() {
+    this._showRadius = true
     this.addChild(this.radius)
+    this.radius.clear()
     this.radius.beginFill(0xffffff, 0.25)
-    this.radius.drawCircle(0, 0, 100)
+    this.radius.drawCircle(0, 0, this.getProp('radius'))
     this.radius.endFill()
     this.radius.alpha = 1
   }
 
   hideRadius() {
+    this._showRadius = false
     this.removeChild(this.radius)
     this.radius.clear()
     this.radius.alpha = 0
@@ -89,6 +92,9 @@ export default class BaseTower extends Phaser.Sprite {
     this._level = v
     if (this.label) {
       this.label.text = this._level
+      if (this._showRadius) {
+        this.showRadius()
+      }
     }
   }
 
@@ -107,5 +113,15 @@ export default class BaseTower extends Phaser.Sprite {
 
   getNextLevelInfo() {
     return this.getLevelInfo(this.level + 1)
+  }
+
+  getProp(propName) {
+    let currentInfo = this.getCurrentLevelInfo()
+    if (propName in currentInfo) {
+      return currentInfo[propName]
+    } else if (propName in this) {
+      return this[propName]
+    }
+    return null
   }
 }

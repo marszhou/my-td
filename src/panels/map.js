@@ -52,8 +52,7 @@ export default class MapPanel extends Phaser.Group {
 
     this.mask = new Phaser.Graphics(this.game, 0, 0)
     this.mask.beginFill(0xffffff)
-    // this.mask.drawCircle(100, 100, 100)
-    this.mask.drawRect(this.x, this.y, this.w, this.h)
+    this.mask.drawRect(this.x, this.y, this.w + 1, this.h + 1)
     this.mask.endFill()
 
     GameState.onSelectedTowerChange.add(this.handleSelectedTowerChange, this)
