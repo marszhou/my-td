@@ -2,7 +2,7 @@ import BorderedFrame from '../components/bordered-frame'
 import {makeTextLabel, verticallyLayoutComponents} from '../utils/functions'
 import TextButton from '../components/text-button'
 import _ from 'lodash'
-import MachineGun from '../sprites/towers/machine-gun'
+// import MachineGun from '../sprites/towers/machine-gun'
 import GameState from 'src/game-state'
 
 export default class TowerInfo extends Phaser.Group {

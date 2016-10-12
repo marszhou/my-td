@@ -1,7 +1,7 @@
 import Grid from '../components/grid'
 // import MachineGun from '../sprites/towers/machine-gun'
 import Path from '../components/path'
-import {globalToLocal} from '../utils/functions'
+import {globalToLocal, getEnemiesInTowerRange, findBestTarget} from '../utils/functions'
 // import Creep from '../sprites/creep'
 import Wave from 'src/wave'
 import GameState from 'src/game-state'
@@ -93,12 +93,42 @@ export default class MapPanel extends Phaser.Group {
       let now = Date.now()
       let ms = now - this.lastFrameTime
       this.lastFrameTime = now
-      this.waves.forEach(wave => {
-        if (wave && wave.activated) {
-          wave.run(ms)
-        }
-      })
+
+      this.moveEnemies(ms)
+      this.towersFire(now)
     }
+  }
+
+  moveEnemies(ms) {
+    this.waves.forEach(wave => {
+      if (wave && wave.activated) {
+        wave.run(ms)
+      }
+    })
+  }
+
+  towersFire(now) {
+    let allEnemies = this.getAllEnemies()
+    GameState.towers.forEach(({tower}) => {
+      if (now - tower.lastFire >= tower.cooldown) {
+        let availableEnemies = getEnemiesInTowerRange(tower, allEnemies)
+        tower.target = findBestTarget(availableEnemies)
+        if (tower.target) {
+          tower.fire()
+        }
+      }
+    })
+  }
+
+  getAllEnemies() {
+    let ret = []
+    this.waves.forEach(wave => {
+      if (wave && wave.activated) {
+        let activatedEnemies = wave.enemies.filter(enemy => enemy.activated)
+        ret = ret.concat(activatedEnemies)
+      }
+    })
+    return ret
   }
 
   generateNextWave(level) {

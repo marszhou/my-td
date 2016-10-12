@@ -1,4 +1,4 @@
-import {makeTextLabel} from 'src/utils/functions'
+// import {makeTextLabel} from 'src/utils/functions'
 
 export default class BaseTower extends Phaser.Sprite {
   constructor(game, x, y, key, frame) {
@@ -17,8 +17,10 @@ export default class BaseTower extends Phaser.Sprite {
     this.maxLevel = 10
     this.target = []
     this.type = 'single'
-    this.speed = 80
+    this.cooldown = 80
     this.built = false
+
+    this.lastFire = 0
 
     // this.addChild(this.radius)
     // this.hideRadius()
@@ -123,5 +125,9 @@ export default class BaseTower extends Phaser.Sprite {
       return this[propName]
     }
     return null
+  }
+
+  fire() {
+    this.lastFire = Date.now()
   }
 }

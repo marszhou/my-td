@@ -9,6 +9,7 @@ export default class Creep extends Phaser.Sprite {
     super(game, 0, 0, 'blue-ball', _.indexOf(_.keys(types), type));
 
     this.activated = false
+    this.text = text
     this.type = type
     this.level = level
     this.speed = 100 + (100 * Math.random())

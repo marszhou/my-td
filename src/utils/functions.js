@@ -92,3 +92,24 @@ export const rectCircleColliding = (rect, circle) => {
   var dy = distY - rect.h / 2;
   return (dx * dx + dy * dy <= (circle.r * circle.r));
 }
+
+export const circlesColliding = (circle1, circle2) => {
+  var dx = circle1.x - circle2.x;
+  var dy = circle1.y - circle2.y;
+  var distance = Math.sqrt(dx * dx + dy * dy);
+
+  return (distance < circle1.radius + circle2.radius)
+}
+
+export const getEnemiesInTowerRange = (tower, enemies) => {
+  let c1 = {x: tower.x, y: tower.y, radius: tower.getProp('radius')}
+
+  return enemies.filter(enemy => {
+    let c2 = {x: enemy.x, y: enemy.y, radius: enemy.width / 2}
+    return circlesColliding(c1, c2)
+  })
+}
+
+export const findBestTarget = (enemies) => {
+  return enemies.length > 0 ? enemies[0] : null
+}
