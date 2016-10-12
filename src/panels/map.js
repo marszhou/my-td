@@ -50,6 +50,12 @@ export default class MapPanel extends Phaser.Group {
     this.onCancelTower = new Phaser.Signal()
     this.onBuildTower = new Phaser.Signal()
 
+    this.mask = new Phaser.Graphics(this.game, 0, 0)
+    this.mask.beginFill(0xffffff)
+    // this.mask.drawCircle(100, 100, 100)
+    this.mask.drawRect(this.x, this.y, this.w, this.h)
+    this.mask.endFill()
+
     GameState.onSelectedTowerChange.add(this.handleSelectedTowerChange, this)
   }
 
@@ -58,7 +64,6 @@ export default class MapPanel extends Phaser.Group {
   }
 
   set currentTowerPrototype(clazz) {
-    this.unhighlightAllTowers()
     this._currentTowerPrototype = clazz
     if (clazz) {
       this._currentTower = new clazz(this.game, 0, 0)
@@ -187,7 +192,13 @@ export default class MapPanel extends Phaser.Group {
   }
 
   onDown(pointer) {
+    // GameState.selectedTower = null
+
     let pos = globalToLocal(this, pointer.position)
+
+    if (pos.x >=0 && pos.x < this.w && pos.y >= 0 && pos.y < this.h) {
+      GameState.selectedTower = null
+    }
 
     if (this.canOperate) {
       let towerCell = this.towerAvailibleCell(pos)
@@ -213,7 +224,7 @@ export default class MapPanel extends Phaser.Group {
 
     GameState.addTower(tower, pos)
     this.currentTowerPrototype = null
-
+    GameState.selectedTower = tower
     this.onBuildTower.dispatch(tower)
   }
 
