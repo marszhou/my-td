@@ -14,6 +14,8 @@ export default class LoaderScene extends Phaser.State {
                               '/static/assets/fonts/bitmapFonts/carrier_command.xml')
     this.game.load.spritesheet('balls', '/static/assets/sprites/balls.png', 17, 17, 6);
     this.game.load.image('blue-ball', '/static/assets/sprites/blue_ball.png')
+    this.game.load.image('bullet1', '/static/assets/bullets/bullet59.png')
+    this.game.load.image('bullet2', '/static/assets/bullets/bullet18.png')
   }
 
   create() {
