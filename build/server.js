@@ -61,7 +61,8 @@ app.use(require('connect-history-api-fallback')())
 
 app.use(devMiddleware)
 
-app.use(hotMiddleware)
+// disable hmr for now
+// app.use(hotMiddleware)
 
 var staticPath = path.posix.join(config.build.assetsPublicPath, config.build.assetsSubDirectory)
 app.use(staticPath, express.static('./static'))
