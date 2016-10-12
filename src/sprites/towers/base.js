@@ -11,10 +11,8 @@ export default class BaseTower extends Phaser.Sprite {
     this.level = 1
 
     this.radius = new Phaser.Graphics(this.game, x + this.width / 2, y + this.height / 2)
-    this.label = makeTextLabel(this.game, this.level, 12)
-    this.label.anchor.set(0.6)
-    this.label.x = this.width / 2
-    this.label.y = this.height / 2
+    this.label = new Phaser.Text(this.game, this.width/2 -2, this.height/2, this.text, {font: '6px Arial', fill: '#ffffff', stroke: '#000000', strokeThickness: 4})
+    this.label.anchor.set(0.5)
 
     this.maxLevel = 10
     this.target = []
