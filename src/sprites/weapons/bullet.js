@@ -2,11 +2,12 @@
 import {localToGlobal, globalToLocal, calculateLengthBetweenPoints, getTargetAngle, getPositionOfVector} from 'src/utils/functions'
 
 class _Bullet extends Phaser.Sprite {
-  constructor(game, x, y, key, speed) {
+  constructor(game, x, y, key, speed, angleOffset) {
     super(game, x, y, key)
 
     this.active = false
     this.speed = speed
+    this.angleOffset = angleOffset
     this.opponent = null
     this.direction = 0
 
@@ -26,7 +27,7 @@ class _Bullet extends Phaser.Sprite {
     let moveLength = ms/1000 * this.speed
     let oOffset = localToGlobal(this.opponent, {x: 0, y: 0})
     let bOffset = localToGlobal(this, {x: 0, y: 0})
-    let totalLength = calculateLengthBetweenPoints(oOffset, bOffset)
+    let totalLength = calculateLengthBetweenPoints(oOffset, bOffset) - this.opponent.width / 2 - this.width / 2
     let angle = getTargetAngle(bOffset, oOffset)
 
     let hit = false
@@ -34,12 +35,15 @@ class _Bullet extends Phaser.Sprite {
       moveLength = totalLength
       hit = true
     }
-    let _position = getPositionOfVector(bOffset, angle, moveLength)
-    let position = globalToLocal(this.parent, _position)
-    this.x = position.x
-    this.y = position.y
+
     if (hit) {
       this.die()
+    } else {
+      let _position = getPositionOfVector(bOffset, angle, moveLength)
+      let position = globalToLocal(this.parent, _position)
+      this.x = position.x
+      this.y = position.y
+      this.angle = angle * 180 / Math.PI - this.angleOffset
     }
   }
 
@@ -63,12 +67,12 @@ class _Bullet extends Phaser.Sprite {
 }
 
 export default class Bullet extends Phaser.Group {
-  constructor(game, key, bufferSize=100, bulletSpeed=400) {
+  constructor(game, key, bufferSize=100, bulletSpeed=400, bulletAngleOffset=0) {
     super(game)
 
     this.key = key
     this.bulletsBuffer = []
-    this.bulletAngleOffset = 0
+    this.bulletAngleOffset = bulletAngleOffset
     this.bulletSpeed = bulletSpeed
 
     for (let i=0; i<bufferSize; i++) {
@@ -80,8 +84,10 @@ export default class Bullet extends Phaser.Group {
   }
 
   newBullet() {
-    let b = new _Bullet(this.game, 0, 0, this.key, this.bulletSpeed)
+    let b = new _Bullet(this.game, 0, 0, this.key, this.bulletSpeed, this.bulletAngleOffset)
     b.anchor.set(0.5)
+    b.width *= 0.5
+    b.height *= 0.5
     b.onDie.add(this.handleBulletDie, this)
     return b
   }

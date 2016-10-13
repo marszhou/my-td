@@ -76,8 +76,8 @@ export default class MachineGun extends BaseTower {
   // }
 
   __makeWeapon() {
-    this.weapon = new Bullet(this.game, 'bullet2')
-    this.weapon.offset(0, 0)
+    this.weapon = new Bullet(this.game, 'bullet1')
+    this.weapon.offset(this.centerX, this.centerY)
     this.addChild(this.weapon)
   }
 
