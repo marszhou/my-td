@@ -47,46 +47,46 @@ export default class MachineGun extends BaseTower {
     this.__makeWeapon()
   }
 
-  __makeWeapon() {
-    this.weapon = this.game.add.weapon(30, 'bullet2')
-    //  The bullet will be automatically killed when it leaves the world bounds
-    this.weapon.bulletKillType = Phaser.Weapon.KILL_WORLD_BOUNDS;
-
-    //  Because our bullet is drawn facing up, we need to offset its rotation:
-    this.weapon.bulletAngleOffset = 90;
-
-    //  The speed at which the bullet is fired
-    this.weapon.bulletSpeed = 400;
-
-    //  Speed-up the rate of fire, allowing them to shoot 1 bullet every 60ms
-    this.weapon.fireRate = 60;
-
-    this.weapon.trackSprite(this, 14, 0);
-
-    console.log(this.weapon)
-  }
-
-  fire() {
-    if (this.opponent) {
-      super.fire()
-      let degree = getTargetAngleDegree(this, this.target)
-      this.weapon.fireAngle = degree
-      this.weapon.fire()
-    }
-  }
-
   // __makeWeapon() {
-  //   this.weapon = new Bullet(this.game, 'bullet2')
-  //   this.weapon.offset(0, 0)
-  //   this.addChild(this.weapon)
+  //   this.weapon = this.game.add.weapon(30, 'bullet2')
+  //   //  The bullet will be automatically killed when it leaves the world bounds
+  //   this.weapon.bulletKillType = Phaser.Weapon.KILL_WORLD_BOUNDS;
+
+  //   //  Because our bullet is drawn facing up, we need to offset its rotation:
+  //   this.weapon.bulletAngleOffset = 90;
+
+  //   //  The speed at which the bullet is fired
+  //   this.weapon.bulletSpeed = 400;
+
+  //   //  Speed-up the rate of fire, allowing them to shoot 1 bullet every 60ms
+  //   this.weapon.fireRate = 60;
+
+  //   this.weapon.trackSprite(this, 14, 0);
+
+  //   console.log(this.weapon)
   // }
 
   // fire() {
   //   if (this.opponent) {
   //     super.fire()
-  //     // let degree = getTargetAngleDegree(this, this.target)
-  //     // this.weapon.fireAngle = degree
-  //     this.weapon.fire(this.opponent)
+  //     let degree = getTargetAngleDegree(this, this.target)
+  //     this.weapon.fireAngle = degree
+  //     this.weapon.fire()
   //   }
   // }
+
+  __makeWeapon() {
+    this.weapon = new Bullet(this.game, 'bullet2')
+    this.weapon.offset(0, 0)
+    this.addChild(this.weapon)
+  }
+
+  fire() {
+    if (this.opponent) {
+      super.fire()
+      // let degree = getTargetAngleDegree(this, this.target)
+      // this.weapon.fireAngle = degree
+      this.weapon.fire(this.opponent)
+    }
+  }
 }

@@ -61,7 +61,7 @@ export default class BaseTower extends Phaser.Sprite {
     this.addChild(this.radius)
     this.radius.clear()
     this.radius.beginFill(0xffffff, 0.25)
-    this.radius.drawCircle(0, 0, this.getProp('radius'))
+    this.radius.drawCircle(0, 0, this.getProp('radius') * 2)
     this.radius.endFill()
     this.radius.alpha = 1
   }

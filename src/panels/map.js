@@ -111,7 +111,7 @@ export default class MapPanel extends Phaser.Group {
   towersUpdate(now, ms) {
     let allEnemies = this.getAllEnemies()
     GameState.towers.forEach(({tower}) => {
-      // tower.updateWeapon(ms)
+      tower.updateWeapon(ms)
       if (now - tower.lastFire >= tower.cooldown) {
         let availableEnemies = getEnemiesInTowerRange(tower, allEnemies)
         tower.opponent = findBestTarget(availableEnemies)

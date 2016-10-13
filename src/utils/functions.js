@@ -99,16 +99,18 @@ export const circlesColliding = (circle1, circle2) => {
   var dx = circle1.x - circle2.x;
   var dy = circle1.y - circle2.y;
   var distance = Math.sqrt(dx * dx + dy * dy);
-
   return (distance < circle1.radius + circle2.radius)
 }
 
 export const getEnemiesInTowerRange = (tower, enemies) => {
-  let c1 = {x: tower.x, y: tower.y, radius: tower.getProp('radius')}
+  let towerRadius = tower.getProp('radius')
+  let c1 = {x: tower.x + tower.width / 2, y: tower.y + tower.height / 2, radius: towerRadius}
 
   return enemies.filter(enemy => {
     let c2 = {x: enemy.x, y: enemy.y, radius: enemy.width / 2}
-    return circlesColliding(c1, c2)
+    let flag = circlesColliding(c1, c2)
+    console.log(flag)
+    return flag
   })
 }
 
