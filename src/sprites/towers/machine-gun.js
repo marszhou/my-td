@@ -14,7 +14,7 @@ export default class MachineGun extends BaseTower {
     this.maxLevel = 10
     this.target = ['air', 'ground']
     this.type = 'single'
-    this.cooldown = 200
+    this.cooldown = 80
 
     this.levels = {
       1: {

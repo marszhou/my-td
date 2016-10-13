@@ -54,8 +54,16 @@ class _Bullet extends Phaser.Sprite {
   wake(opponent) {
     this.opponent = opponent
     this.active = true
-    this.x = 0
-    this.y = 0
+
+    let oOffset = localToGlobal(this.opponent, {x: 0, y: 0})
+    let bOffset = localToGlobal(this.parent, {x: 0, y: 0})
+    let angle = getTargetAngle(bOffset, oOffset)
+
+    let _position = getPositionOfVector(bOffset, angle, 10 /* tower radius is 10 */)
+    let position = globalToLocal(this.parent, _position)
+
+    this.x = position.x
+    this.y = position.y
   }
   // bullet is dead
   // clear its target
@@ -94,8 +102,8 @@ export default class Bullet extends Phaser.Group {
 
   fire(opponent) {
     let bullet = this._getCurrentAvailableBulletFromBuffer()
-    bullet.wake(opponent)
     this.add(bullet)
+    bullet.wake(opponent)
   }
 
   handleBulletDie(bullet) {
