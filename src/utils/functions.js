@@ -109,7 +109,7 @@ export const getEnemiesInTowerRange = (tower, enemies) => {
   return enemies.filter(enemy => {
     let c2 = {x: enemy.x, y: enemy.y, radius: enemy.width / 2}
     let flag = circlesColliding(c1, c2)
-    console.log(flag)
+    // console.log(flag)
     return flag
   })
 }

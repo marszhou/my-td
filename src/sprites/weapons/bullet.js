@@ -29,13 +29,18 @@ class _Bullet extends Phaser.Sprite {
     let totalLength = calculateLengthBetweenPoints(oOffset, bOffset)
     let angle = getTargetAngle(bOffset, oOffset)
 
+    let hit = false
     if (moveLength >= totalLength) {
       moveLength = totalLength
+      hit = true
     }
-
-    let position = globalToLocal(this, getPositionOfVector(bOffset, angle, moveLength))
+    let _position = getPositionOfVector(bOffset, angle, moveLength)
+    let position = globalToLocal(this.parent, _position)
     this.x = position.x
     this.y = position.y
+    if (hit) {
+      this.die()
+    }
   }
 
   isBulletOutOfBound() {
