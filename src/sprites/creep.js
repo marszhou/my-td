@@ -1,3 +1,6 @@
+import HealthBar from 'src/vendors/healthbar'
+console.log(HealthBar)
+
 export const types = {
   creep: 'creep',
   flying: 'flying'
@@ -28,10 +31,14 @@ export default class Creep extends Phaser.Sprite {
   set activated(v) {
     this._activated = v
     this.visible = !!v
+    if (v && !this.healthbar) {
+      this.healthbar = new HealthBar(this.game, {width: this.width, height: 5})
+      this.healthbar.setPercent(70)
+    }
   }
 
   run(ms) {
-    this.currentLength += ms * this.speed /1000
+    this.currentLength += ms * this.speed / 1000
     return this.currentLength
   }
 
@@ -39,16 +46,21 @@ export default class Creep extends Phaser.Sprite {
     this.health -= v
     if (this.health <= 0) {
       this.onKilled.dispatch()
+      this.healthbar.kill()
     }
   }
 
   positioning({x, y, percent}) {
     this.x = x
     this.y = y + this.offset * this.height
+    if (this.healthbar) {
+      this.healthbar.setPosition(this.x + 5, this.y - 10)
+    }
 
     if (percent === 1) {
       this.finished = true
       this.onFinished.dispatch()
+      this.healthbar.kill()
     }
   }
 }
