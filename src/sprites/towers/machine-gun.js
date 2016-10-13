@@ -67,11 +67,26 @@ export default class MachineGun extends BaseTower {
   }
 
   fire() {
-    if (this.target) {
+    if (this.opponent) {
       super.fire()
       let degree = getTargetAngleDegree(this, this.target)
       this.weapon.fireAngle = degree
       this.weapon.fire()
     }
   }
+
+  // __makeWeapon() {
+  //   this.weapon = new Bullet(this.game, 'bullet2')
+  //   this.weapon.offset(0, 0)
+  //   this.addChild(this.weapon)
+  // }
+
+  // fire() {
+  //   if (this.opponent) {
+  //     super.fire()
+  //     // let degree = getTargetAngleDegree(this, this.target)
+  //     // this.weapon.fireAngle = degree
+  //     this.weapon.fire(this.opponent)
+  //   }
+  // }
 }

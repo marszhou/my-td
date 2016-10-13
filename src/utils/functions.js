@@ -14,12 +14,13 @@ export const verticallyLayoutComponents = (components, startPosition, gap) => {
   return components
 }
 
-function _localToGlobal(displayObject, point) {
+function _localToGlobal(displayObject, point, relativeTo = null) {
   let ret = {
     x: point.x + displayObject.x,
     y: point.y + displayObject.y
   }
-  if (displayObject.parent) {
+  let parent = displayObject.parent
+  if (parent && parent !== relativeTo) {
     return _localToGlobal(displayObject.parent, ret)
   } else {
     return ret
@@ -28,12 +29,13 @@ function _localToGlobal(displayObject, point) {
 
 export const localToGlobal = _localToGlobal
 
-function _globalToLocal(displayObject, point) {
+function _globalToLocal(displayObject, point, relativeTo = null) {
   let ret = {
     x: point.x - displayObject.x,
     y: point.y - displayObject.y
   }
-  if (displayObject.parent) {
+  let parent = displayObject.parent
+  if (parent && parent !== relativeTo) {
     return _globalToLocal(displayObject.parent, ret)
   } else {
     return ret
@@ -114,6 +116,16 @@ export const findBestTarget = (enemies) => {
   return enemies.length > 0 ? enemies[0] : null
 }
 
+export const getTargetAngle = (p1, p2) => {
+  return Math.atan2(p2.y - p1.y, p2.x - p1.x)
+}
+
 export const getTargetAngleDegree = (p1, p2) => {
-  return Math.atan2(p2.y - p1.y, p2.x - p1.x) * 180 / Math.PI
+  return getTargetAngle(p1, p2) * 180 / Math.PI
+}
+
+export const getPositionOfVector = (p, angle, length) => {
+  let x = Math.cos(angle) * length
+  let y = Math.sin(angle) * length
+  return {x: p.x + x, y: p.y + y}
 }

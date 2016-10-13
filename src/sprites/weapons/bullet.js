@@ -1,4 +1,5 @@
-import Weapon from './weapon'
+// import Weapon from './weapon'
+import {localToGlobal, globalToLocal, calculateLengthBetweenPoints, getTargetAngle, getPositionOfVector} from 'src/utils/functions'
 
 class _Bullet extends Phaser.Sprite {
   constructor(game, x, y, key, speed) {
@@ -6,8 +7,10 @@ class _Bullet extends Phaser.Sprite {
 
     this.active = false
     this.speed = speed
-    this.target = null
+    this.opponent = null
     this.direction = 0
+
+    this.onDie = new Phaser.Signal()
   }
 
   get active() {
@@ -20,40 +23,72 @@ class _Bullet extends Phaser.Sprite {
   }
 
   move(ms) {
+    let moveLength = ms/1000 * this.speed
+    let oOffset = localToGlobal(this.opponent, {x: 0, y: 0})
+    let bOffset = localToGlobal(this, {x: 0, y: 0})
+    let totalLength = calculateLengthBetweenPoints(oOffset, bOffset)
+    let angle = getTargetAngle(bOffset, oOffset)
 
+    if (moveLength >= totalLength) {
+      moveLength = totalLength
+    }
+
+    let position = globalToLocal(this, getPositionOfVector(bOffset, angle, moveLength))
+    this.x = position.x
+    this.y = position.y
   }
 
   isBulletOutOfBound() {
     return false
   }
+
+  wake(opponent) {
+    this.opponent = opponent
+    this.active = true
+    this.x = 0
+    this.y = 0
+  }
   // bullet is dead
   // clear its target
   die() {
-
+    this.active = false
+    this.opponent = null
+    this.onDie.dispatch(this)
   }
 }
 
 export default class Bullet extends Phaser.Group {
-  constructor(game, key, bufferSize=30, bulletSpeed=400, fireRate=60) {
+  constructor(game, key, bufferSize=100, bulletSpeed=400) {
     super(game)
 
     this.key = key
     this.bulletsBuffer = []
-    for (let i=0; i<bufferSize; i++) {
-      let b = new _Bullet(game, 0, 0, key, bulletSpeed)
-      this.bulletsBuffer.push(b)
-      this.addChild(b)
-    }
     this.bulletAngleOffset = 0
-    this.fireAngleDegree = 0
     this.bulletSpeed = bulletSpeed
-    this.fireRate = fireRate
+
+    for (let i=0; i<bufferSize; i++) {
+      let b = this.newBullet()
+      this.bulletsBuffer.push(b)
+    }
 
     this.lastFrame = Date.now()
   }
 
-  fire() {
+  newBullet() {
+    let b = new _Bullet(this.game, 0, 0, this.key, this.bulletSpeed)
+    b.anchor.set(0.5)
+    b.onDie.add(this.handleBulletDie, this)
+    return b
+  }
 
+  fire(opponent) {
+    let bullet = this._getCurrentAvailableBulletFromBuffer()
+    bullet.wake(opponent)
+    this.add(bullet)
+  }
+
+  handleBulletDie(bullet) {
+    this.remove(bullet)
   }
 
   _getCurrentAvailableBulletFromBuffer() {
@@ -67,17 +102,17 @@ export default class Bullet extends Phaser.Group {
     if (ret) {
       return ret
     }
-    let bullet = new _Bullet(game, 0, 0, this.key, this.bulletSpeed)
+    let bullet = this.newBullet()
     this.bulletsBuffer.push(bullet)
     return bullet
   }
 
-  update() {
+  offset(x, y) {
+    this.x = x
+    this.y = y
+  }
 
-    let now = Date.now()
-    let ms = now - this.lastFrame
-    this.lastFrame = now
-
+  _update(ms) {
     this.bulletsBuffer.forEach(bullet => {
       if (bullet.active) {
         bullet.move(ms)

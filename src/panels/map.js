@@ -78,6 +78,7 @@ export default class MapPanel extends Phaser.Group {
   }
 
   update() {
+    // console.log('map update')
     this.game.debug.text(`fps=${this.game.time.fps}`, 10, 780)
 
     // find current cell
@@ -95,7 +96,7 @@ export default class MapPanel extends Phaser.Group {
       this.lastFrameTime = now
 
       this.moveEnemies(ms)
-      this.towersFire(now)
+      this.towersUpdate(now, ms)
     }
   }
 
@@ -107,13 +108,14 @@ export default class MapPanel extends Phaser.Group {
     })
   }
 
-  towersFire(now) {
+  towersUpdate(now, ms) {
     let allEnemies = this.getAllEnemies()
     GameState.towers.forEach(({tower}) => {
+      // tower.updateWeapon(ms)
       if (now - tower.lastFire >= tower.cooldown) {
         let availableEnemies = getEnemiesInTowerRange(tower, allEnemies)
-        tower.target = findBestTarget(availableEnemies)
-        if (tower.target) {
+        tower.opponent = findBestTarget(availableEnemies)
+        if (tower.opponent) {
           tower.fire()
         }
       }

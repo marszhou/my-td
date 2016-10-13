@@ -130,4 +130,10 @@ export default class BaseTower extends Phaser.Sprite {
   fire() {
     this.lastFire = Date.now()
   }
+
+  updateWeapon(ms) {
+    if (this.weapon) {
+      this.weapon._update(ms)
+    }
+  }
 }

@@ -7,6 +7,8 @@ import TowerInfoPanel from '../panels/tower-info'
 import NextWavePanel from '../panels/next-wave'
 import GameState from 'src/game-state'
 
+// import Bullet from 'src/sprites/weapons/bullet'
+
 export default class PlayingScene extends Phaser.State {
   preload() {
     this.game.time.advancedTiming = true
@@ -45,6 +47,10 @@ export default class PlayingScene extends Phaser.State {
     GameState.onSelectedTowerChange.add(this.handleSelectedTowerChange, this)
 
     GameState.init()
+
+    // this.weapon = new Bullet(this.game, 'bullet2')
+    // this.weapon.offset(0, 0)
+    // this.addChild(this.weapon)
 
     // this.game.add.group(this.panels.map)
   }
