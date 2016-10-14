@@ -23,6 +23,7 @@ export default class Creep extends Phaser.Sprite {
     this.onKilled = new Phaser.Signal()
     this.onFinished = new Phaser.Signal()
     this.offset = (Math.random() - 0.5) * 2 // 起始位置，增加一些随机值
+    this.gold = 1
   }
 
   get activated() {
@@ -45,7 +46,8 @@ export default class Creep extends Phaser.Sprite {
 
   damage(v) {
     this.health -= v
-    if (this.health <= 0) {
+    if (this.health <= 0 && this.activated) {
+      this.activated = false
       this.onKilled.dispatch()
       this.healthbar.kill()
     }
