@@ -52,9 +52,9 @@ class GameState {
     return tower
   }
 
-  buyTower(tower) {
+  // buyTower(tower) {
 
-  }
+  // }
 
   upgradeTower(tower) {
     let nextLevelInfo = tower.getNextLevelInfo()
@@ -131,6 +131,15 @@ class GameState {
   hitEnemy(enemy, damage) {
     console.log('hit', enemy, damage)
     enemy.damage(damage)
+  }
+
+  killEnemy(enemy) {
+    this.kills += 1
+    this.gold += enemy.gold
+  }
+
+  surviveEnemy(enemy) {
+    this.lives -= 1
   }
 }
 
