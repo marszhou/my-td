@@ -139,6 +139,7 @@ class GameState {
   }
 
   surviveEnemy(enemy) {
+    enemy.activated = false
     this.lives -= 1
   }
 }

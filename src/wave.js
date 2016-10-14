@@ -3,7 +3,7 @@ import Boss from 'src/sprites/boss'
 import GameState from 'src/game-state'
 
 const max_wave_duration = 1
-const creep_gap = 100
+const creep_gap = 300
 
 export default class Wave {
   static generateWave(level, game, map, path, startPoint) {
