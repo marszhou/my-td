@@ -1,5 +1,6 @@
 import Creep from 'src/sprites/creep'
 import Boss from 'src/sprites/boss'
+import GameState from 'src/game-state'
 
 const max_wave_duration = 1
 const creep_gap = 100
@@ -100,10 +101,12 @@ export default class Wave {
 
   handleKilled(m) {
     this.removeEnemy(m)
+    GameState.killEnemy(m)
   }
 
   handleFinished(m) {
     this.removeEnemy(m)
+    GameState.surviveEnemy(m)
   }
 
   removeEnemy(m) {
