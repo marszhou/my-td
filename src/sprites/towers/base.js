@@ -136,4 +136,8 @@ export default class BaseTower extends Phaser.Sprite {
       this.weapon._update(ms)
     }
   }
+
+  findBestTarget(enemies) {
+    return enemies.length > 0 ? enemies[0] : null
+  }
 }

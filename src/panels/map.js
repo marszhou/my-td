@@ -114,7 +114,7 @@ export default class MapPanel extends Phaser.Group {
       tower.updateWeapon(ms)
       if (now - tower.lastFire >= tower.cooldown) {
         let availableEnemies = getEnemiesInTowerRange(tower, allEnemies)
-        tower.opponent = findBestTarget(availableEnemies)
+        tower.opponent = tower.findBestTarget(availableEnemies)
         if (tower.opponent) {
           tower.fire()
         }

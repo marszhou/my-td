@@ -129,7 +129,7 @@ class GameState {
   }
 
   hitEnemy(enemy, damage) {
-    console.log('hit', enemy, damage)
+    // console.log('hit', enemy, damage)
     enemy.damage(damage)
   }
 

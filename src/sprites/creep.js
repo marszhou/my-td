@@ -24,6 +24,8 @@ export default class Creep extends Phaser.Sprite {
     this.onFinished = new Phaser.Signal()
     this.offset = (Math.random() - 0.5) * 2 // 起始位置，增加一些随机值
     this.gold = 1
+
+    this.pendingBullets = []
   }
 
   get activated() {
@@ -89,5 +91,21 @@ export default class Creep extends Phaser.Sprite {
     if (this.healthbar) {
       this.healthbar.setPercent(this.health / this.maxHealth * 100)
     }
+  }
+
+  insertPendingBullet(bullet) {
+    this.pendingBullets.push(bullet)
+    // console.log('insert', this.pendingBullets.length)
+  }
+
+  pendingBulletDie(bullet) {
+    _.pull(this.pendingBullets, bullet)
+    // console.log('pull', this.pendingBullets.length)
+  }
+
+  pendingBulletsDamage() {
+    return _.reduce(this.pendingBullets, (ret, b) => {
+      return ret + b.damage
+    }, 0)
   }
 }

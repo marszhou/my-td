@@ -108,10 +108,12 @@ export default class Bullet extends Phaser.Group {
     bullet.damage = damage
     this.add(bullet)
     bullet.wake(opponent)
+    opponent.insertPendingBullet(bullet)
   }
 
   handleBulletDie(bullet) {
     this.remove(bullet)
+    bullet.opponent.pendingBulletDie(bullet)
     GameState.hitEnemy(bullet.opponent, bullet.damage)
   }
 

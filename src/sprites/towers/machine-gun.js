@@ -1,6 +1,6 @@
 import BaseTower from './base'
 import Bullet from '../weapons/bullet'
-import {getTargetAngleDegree} from 'src/utils/functions'
+// import {getTargetAngleDegree} from 'src/utils/functions'
 
 export default class MachineGun extends BaseTower {
   constructor(game, x, y) {
@@ -18,7 +18,7 @@ export default class MachineGun extends BaseTower {
 
     this.levels = {
       1: {
-        damage: 100,
+        damage: 34,
         radius: 100,
         cost: 100
       },
@@ -43,6 +43,8 @@ export default class MachineGun extends BaseTower {
         cost: 850
       }
     }
+
+    this.fireTimes = 0
 
     this.__makeWeapon()
   }
@@ -84,9 +86,30 @@ export default class MachineGun extends BaseTower {
   fire() {
     if (this.opponent) {
       super.fire()
-      // let degree = getTargetAngleDegree(this, this.target)
-      // this.weapon.fireAngle = degree
+      this.fireTimes += 1
+      // console.log(this.fireTimes)
       this.weapon.fire(this.opponent, this.getProp('damage'))
     }
+  }
+
+  findBestTarget(enemies) {
+    if (enemies.length === 0) return
+    // if (enemies.length === 1) return enemies[0]
+
+    enemies = _.sortBy(
+      enemies.filter(e => {
+        let pendingDamage = e.pendingBulletsDamage()
+        let expectHealth = e.health - pendingDamage
+        e.expectHealth = expectHealth
+        return expectHealth > 0
+      }),
+      e => e.expectHealth
+    )
+
+    if (enemies.length === 0) {
+      return null
+    }
+
+    return enemies[0]
   }
 }
