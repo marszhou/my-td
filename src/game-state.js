@@ -127,6 +127,11 @@ class GameState {
     }
     return false
   }
+
+  hitEnemy(enemy, damage) {
+    console.log('hit', enemy, damage)
+    enemy.damage(damage)
+  }
 }
 
 export default new GameState()

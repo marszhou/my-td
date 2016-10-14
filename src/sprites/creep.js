@@ -15,13 +15,14 @@ export default class Creep extends Phaser.Sprite {
     this.text = text
     this.type = type
     this.level = level
-    this.speed = 100 + (100 * Math.random())
+    this.speed = 75 + (50 * Math.random())
+    this.maxHealth = 100
     this.health = 100
     this.currentLength = 0
     this.finished = false
     this.onKilled = new Phaser.Signal()
     this.onFinished = new Phaser.Signal()
-    this.offset = (Math.random() - 0.5) * 2
+    this.offset = (Math.random() - 0.5) * 2 // 起始位置，增加一些随机值
   }
 
   get activated() {
@@ -33,7 +34,7 @@ export default class Creep extends Phaser.Sprite {
     this.visible = !!v
     if (v && !this.healthbar) {
       this.healthbar = new HealthBar(this.game, {width: this.width, height: 5})
-      this.healthbar.setPercent(70)
+      this.updateHealthbar()
     }
   }
 
@@ -61,6 +62,30 @@ export default class Creep extends Phaser.Sprite {
       this.finished = true
       this.onFinished.dispatch()
       this.healthbar.kill()
+    }
+  }
+
+  get health() {
+    return this._health
+  }
+
+  set health(v) {
+    this._health = v
+    this.updateHealthbar()
+  }
+
+  get maxHealth() {
+    return this._maxHealth
+  }
+
+  set maxHealth(v) {
+    this._maxHealth = v
+    this.updateHealthbar()
+  }
+
+  updateHealthbar() {
+    if (this.healthbar) {
+      this.healthbar.setPercent(this.health / this.maxHealth * 100)
     }
   }
 }

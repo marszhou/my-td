@@ -18,7 +18,7 @@ export default class MachineGun extends BaseTower {
 
     this.levels = {
       1: {
-        damage: 10,
+        damage: 100,
         radius: 100,
         cost: 100
       },
@@ -86,7 +86,7 @@ export default class MachineGun extends BaseTower {
       super.fire()
       // let degree = getTargetAngleDegree(this, this.target)
       // this.weapon.fireAngle = degree
-      this.weapon.fire(this.opponent)
+      this.weapon.fire(this.opponent, this.getProp('damage'))
     }
   }
 }

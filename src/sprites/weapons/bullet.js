@@ -1,5 +1,6 @@
 // import Weapon from './weapon'
 import {localToGlobal, globalToLocal, calculateLengthBetweenPoints, getTargetAngle, getPositionOfVector} from 'src/utils/functions'
+import GameState from 'src/game-state'
 
 class _Bullet extends Phaser.Sprite {
   constructor(game, x, y, key, speed, angleOffset) {
@@ -10,6 +11,7 @@ class _Bullet extends Phaser.Sprite {
     this.angleOffset = angleOffset
     this.opponent = null
     this.direction = 0
+    this.damage = 0
 
     this.onDie = new Phaser.Signal()
   }
@@ -68,9 +70,10 @@ class _Bullet extends Phaser.Sprite {
   // bullet is dead
   // clear its target
   die() {
+    this.onDie.dispatch(this)
+
     this.active = false
     this.opponent = null
-    this.onDie.dispatch(this)
   }
 }
 
@@ -100,14 +103,16 @@ export default class Bullet extends Phaser.Group {
     return b
   }
 
-  fire(opponent) {
+  fire(opponent, damage) {
     let bullet = this._getCurrentAvailableBulletFromBuffer()
+    bullet.damage = damage
     this.add(bullet)
     bullet.wake(opponent)
   }
 
   handleBulletDie(bullet) {
     this.remove(bullet)
+    GameState.hitEnemy(bullet.opponent, bullet.damage)
   }
 
   _getCurrentAvailableBulletFromBuffer() {
