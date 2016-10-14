@@ -1,5 +1,4 @@
 import HealthBar from 'src/vendors/healthbar'
-console.log(HealthBar)
 
 export const types = {
   creep: 'creep',
@@ -16,6 +15,7 @@ export default class Creep extends Phaser.Sprite {
     this.type = type
     this.level = level
     this.speed = 75 + (50 * Math.random())
+    // this.speed = 200
     this.maxHealth = 100
     this.health = 100
     this.currentLength = 0

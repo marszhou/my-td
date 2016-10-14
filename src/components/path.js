@@ -1,4 +1,4 @@
-import {calculateLengthOfLine, formatFloat, formatPercent, rectCircleColliding} from 'utils/functions'
+import {calculateLengthOfLine, formatFloat, formatPercent, rectCircleColliding, calculateAvgPath} from 'utils/functions'
 
 export default class Path extends Phaser.Graphics {
   constructor(game, width, height, cellWidth, steps, points) {
@@ -18,6 +18,8 @@ export default class Path extends Phaser.Graphics {
     this.cellWidth = cellWidth
     this.steps = steps
     this.points = points
+    this.avgPoints = []
+    this.line = []
     this.render()
   }
 
@@ -48,6 +50,8 @@ export default class Path extends Phaser.Graphics {
       // let py = this.game.math.bezierInterpolation(pys, i)
       let px = this.game.math.catmullRomInterpolation(pxs, i)
       let py = this.game.math.catmullRomInterpolation(pys, i)
+      // let px = this.game.math.linearInterpolation(pxs, i)
+      // let py = this.game.math.linearInterpolation(pys, i)
       line.push({x: px, y: py})
       this.lineTo(px, py)
 
@@ -63,17 +67,38 @@ export default class Path extends Phaser.Graphics {
     line.push(lastPoint)
 
     // console.log(line)
+    this.line = line
 
     this.totalLength = calculateLengthOfLine(line)
     console.log('totalLength=', this.totalLength)
 
+    this.avgPoints = calculateAvgPath(this.totalLength, this.line, Math.floor(this.line.length / 4))
+    console.log(this.avgPoints)
+
     // console.log(line)
     this.lineStyle(0)
-    this.points.map(point => this.translatePoint(point)).forEach(point => {
+    // line
+    // // .map(point => this.translatePoint(point))
+    // .forEach(point => {
+    //   this.beginFill(0x0000ff)
+    //   this.drawCircle(point.x, point.y, 8)
+    //   this.endFill()
+    // })
+    // this.points
+    // .map(point => this.translatePoint(point))
+    points
+    .forEach(point => {
       this.beginFill(0x00ff00)
       this.drawCircle(point.x, point.y, 8)
       this.endFill()
     })
+
+    // this.avgPoints
+    // .forEach(point => {
+    //   this.beginFill(0x00ffff)
+    //   this.drawCircle(point.x, point.y, 8)
+    //   this.endFill()
+    // })
 
     this.towerAvailibleCells.forEach(_point => {
       let point = this.translatePoint(_point)
@@ -87,8 +112,12 @@ export default class Path extends Phaser.Graphics {
     let percent = currentLength / this.totalLength
     if (percent > 1) percent = 1
     return {
-      x: formatFloat(this.game.math.catmullRomInterpolation(this.translatedPositions.pxs, percent)),
-      y: formatFloat(this.game.math.catmullRomInterpolation(this.translatedPositions.pys, percent)),
+      // x: formatFloat(this.game.math.catmullRomInterpolation(this.translatedPositions.pxs, percent)),
+      // y: formatFloat(this.game.math.catmullRomInterpolation(this.translatedPositions.pys, percent)),
+      // x: formatFloat(this.game.math.catmullRomInterpolation(_.map(this.avgPoints, 'x'), percent)),
+      // y: formatFloat(this.game.math.catmullRomInterpolation(_.map(this.avgPoints, 'y'), percent)),
+      x: formatFloat(this.game.math.linearInterpolation(_.map(this.avgPoints, 'x'), percent)),
+      y: formatFloat(this.game.math.linearInterpolation(_.map(this.avgPoints, 'y'), percent)),
       percentString: formatPercent(percent),
       percent: percent
     }

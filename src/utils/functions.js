@@ -64,6 +64,21 @@ export const calculateLengthOfLine = (line) => {
   return ret
 }
 
+export const calculateAvgPath = (length, line, step) => {
+  let current = 0
+  let currentStep = 1
+  let ret = []
+  ret.push(line[0])
+  for (let i = 1; i < line.length; i++) {
+    current += calculateLengthBetweenPoints(line[i - 1], line[i])
+    if (current >= length * currentStep / step) {
+      ret.push(line[i])
+      currentStep += 1
+    }
+  }
+  return ret
+}
+
 export const formatFloat = (v) => {
   return Number(sprintf('%0.2f', v))
 }

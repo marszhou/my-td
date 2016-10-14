@@ -1,7 +1,7 @@
 import Grid from '../components/grid'
 // import MachineGun from '../sprites/towers/machine-gun'
 import Path from '../components/path'
-import {globalToLocal, getEnemiesInTowerRange, findBestTarget} from '../utils/functions'
+import {globalToLocal, getEnemiesInTowerRange} from '../utils/functions'
 // import Creep from '../sprites/creep'
 import Wave from 'src/wave'
 import GameState from 'src/game-state'
@@ -24,7 +24,8 @@ export default class MapPanel extends Phaser.Group {
     this.add(this.grid)
 
     let pathPoints = [[0, 14], [7, 10], [16, 28], [25, 23], [24, 10], [34, 4], [40, 7]]
-    this.path = new Path(this.game, width, height, cellWidth, 80, pathPoints)
+    // let pathPoints = [[0, 14], [20, 14], [40, 14]]
+    this.path = new Path(this.game, width, height, cellWidth, 100, pathPoints)
     // console.log(this.path.getTowerAvailibleCells())
     this.add(this.path)
 
